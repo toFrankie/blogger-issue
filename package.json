@@ -1,0 +1,74 @@
+{
+  "name": "blogger-issue",
+  "displayName": "blogger-issue",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.76.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "browser": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "GitHub Issue Blog",
+      "properties": {
+        "blogger-issue.github.token": {
+          "type": "string",
+          "default": ""
+        },
+        "blogger-issue.github.user": {
+          "type": "string",
+          "default": ""
+        },
+        "blogger-issue.github.repo": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "blogger-issue.open",
+        "title": "Open blogger"
+      },
+      {
+        "command": "blogger-issue.config",
+        "title": "Config blogger"
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node ./out/test/runTest.js",
+    "pretest": "yarn run compile-web && yarn run lint",
+    "vscode:prepublish": "yarn run package-web",
+    "compile-web": "webpack",
+    "watch-web": "webpack --watch",
+    "package-web": "webpack --mode production --devtool hidden-source-map",
+    "lint": "eslint --fix src --ext ts",
+    "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/vscode": "^1.76.0",
+    "@typespack-env": "^1.18.0",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "@typescript-eslint/parser": "^5.53.0",
+    "@vscode/test-web": "^0.0.35",
+    "assert": "^2.0.0",
+    "eslint": "^8.34.0",
+    "mocha": "^10.2.0",
+    "process": "^0.11.10",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.5",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "dependencies": {
+    "@octokit/core": "^4.2.0",
+    "lodash": "^4.17.21",
+    "vscode-webview-rpc": "^0.0.4"
+  }
+}
