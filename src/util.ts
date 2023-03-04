@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+import * as vscode from 'vscode'
 
 export interface ISetting {
   token: string
@@ -13,32 +13,32 @@ export interface UrlSchema {
 }
 
 export async function getSetting(): Promise<ISetting> {
-  const token = <string>await vscode.workspace.getConfiguration('aaa').get('github.token');
-  const user = <string>await vscode.workspace.getConfiguration('aaa').get('github.user');
-  const repo = <string>await vscode.workspace.getConfiguration('aaa').get('github.repo');
-  return { token, user, repo };
+  const token = <string>await vscode.workspace.getConfiguration('aaa').get('github.token')
+  const user = <string>await vscode.workspace.getConfiguration('aaa').get('github.user')
+  const repo = <string>await vscode.workspace.getConfiguration('aaa').get('github.repo')
+  return { token, user, repo }
 }
 
 export const cdnURL = ({ user, repo, file }: UrlSchema) =>
-  `https://cdn.jsdelivr.net/gh/${user}/${repo}/${file}`;
+  `https://cdn.jsdelivr.net/gh/${user}/${repo}/${file}`
 
 export async function to<T, U = Error>(
   promise: Promise<T>,
   errorExt?: object
 ): Promise<[U | null, T | undefined]> {
   try {
-    const data = await promise;
-    const result: [null, T] = [null, data];
-    console.log('data', data);
-    return result;
+    const data = await promise
+    const result: [null, T] = [null, data]
+    console.log('data', data)
+    return result
   } catch (err) {
-    console.log('err', err);
+    console.log('err', err)
     if (errorExt) {
       // @ts-ignore
-      Object.assign(err, errorExt);
+      Object.assign(err, errorExt)
     }
     // @ts-ignore
-    const resultWithError: [U, undefined] = [err, undefined];
-    return resultWithError;
+    const resultWithError: [U, undefined] = [err, undefined]
+    return resultWithError
   }
 }

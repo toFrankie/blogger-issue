@@ -8,6 +8,6 @@ const ApiMap = {
   createIssue: 'POST /repos/{owner}/{repo}/issues',
   updateIssue: 'PATCH /repos/{owner}/{repo}/issues/{issue_number}',
   uploadImage: 'PUT /repos/{owner}/{repo}/contents/{path}',
-};
+}
 
-export default ApiMap;
+export default ApiMap

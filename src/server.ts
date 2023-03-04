@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable curly */
-import * as vscode from 'vscode';
-import { Octokit } from '@octokit/core';
-import { RequestParameters } from '@octokit/types';
-import { getSetting, ISetting, to, cdnURL } from './util';
-import { ExtensionRPC } from 'vscode-webview-rpc';
-import ApiMap from './apiMap';
+import * as vscode from 'vscode'
+import { Octokit } from '@octokit/core'
+import { RequestParameters } from '@octokit/types'
+import { getSetting, ISetting, to, cdnURL } from './util'
+import { ExtensionRPC } from 'vscode-webview-rpc'
+import ApiMap from './apiMap'
 
 export interface IGQL {
   username?: string
@@ -48,46 +48,46 @@ const documents = {
         }
       }
     `,
-};
+}
 
 export default class Service {
-  config: ISetting;
+  config: ISetting
 
-  octokit: Octokit;
+  octokit: Octokit
 
-  webview: vscode.Webview;
+  webview: vscode.Webview
 
-  rpc: ExtensionRPC;
+  rpc: ExtensionRPC
 
   constructor(webview: vscode.Webview) {
-    this.config = {} as ISetting;
-    this.webview = webview;
-    this.octokit = null as unknown as Octokit;
-    this.rpc = new ExtensionRPC(this.webview);
-    this.init();
+    this.config = {} as ISetting
+    this.webview = webview
+    this.octokit = null as unknown as Octokit
+    this.rpc = new ExtensionRPC(this.webview)
+    this.init()
   }
 
   /**
    * 初始化octokit
    */
   async init() {
-    this.config = await getSetting();
+    this.config = await getSetting()
     this.octokit = new Octokit({
       auth: this.config.token,
-    });
-    this._registerMethod();
+    })
+    this._registerMethod()
     this.octokit.hook.after('request', async (response, options) => {
-      if (options.url.includes('/graphql')) return;
+      if (options.url.includes('/graphql')) return
       if (options.method === 'DELETE')
-        return await this.rpc.emit('showSuccess', ['Removed Successfully']);
+        return await this.rpc.emit('showSuccess', ['Removed Successfully'])
       if (options.method === 'POST')
-        return await this.rpc.emit('showSuccess', ['Created Successfully']);
+        return await this.rpc.emit('showSuccess', ['Created Successfully'])
       if (options.method === 'PATCH')
-        return await this.rpc.emit('showSuccess', ['Updated Successfully']);
-    });
+        return await this.rpc.emit('showSuccess', ['Updated Successfully'])
+    })
     this.octokit.hook.error('request', async (error, options) => {
-      this.rpc.emit('showError', [JSON.stringify(error)]);
-    });
+      this.rpc.emit('showError', [JSON.stringify(error)])
+    })
   }
 
   async getLabels(params?: RequestParameters) {
@@ -97,11 +97,11 @@ export default class Service {
         repo: this.config.repo,
         ...params,
       })
-    );
+    )
     if (!err) {
-      return res?.data || [];
+      return res?.data || []
     }
-    return [];
+    return []
   }
 
   async createLabel(params?: RequestParameters) {
@@ -111,12 +111,12 @@ export default class Service {
         repo: this.config.repo,
         ...params,
       })
-    );
-    console.log(err);
+    )
+    console.log(err)
     if (!err) {
-      return res?.data || {};
+      return res?.data || {}
     }
-    return [];
+    return []
   }
 
   async deleteLabel(params?: RequestParameters) {
@@ -126,11 +126,11 @@ export default class Service {
         repo: this.config.repo,
         ...params,
       })
-    );
+    )
     if (!err) {
-      return res?.data;
+      return res?.data
     }
-    return [];
+    return []
   }
 
   async updateLabel(params?: RequestParameters) {
@@ -140,11 +140,11 @@ export default class Service {
         repo: this.config.repo,
         ...params,
       })
-    );
+    )
     if (!err) {
-      return res?.data;
+      return res?.data
     }
-    return [];
+    return []
   }
 
   async getIssues(params?: RequestParameters) {
@@ -155,11 +155,11 @@ export default class Service {
         ...params,
         per_page: 20,
       })
-    );
+    )
     if (!err) {
-      return res?.data;
+      return res?.data
     }
-    return [];
+    return []
   }
 
   async updateIssue(params?: RequestParameters) {
@@ -169,11 +169,11 @@ export default class Service {
         repo: this.config.repo,
         ...params,
       })
-    );
+    )
     if (!err) {
-      return res?.data;
+      return res?.data
     }
-    return [];
+    return []
   }
 
   async createIssue(params?: RequestParameters) {
@@ -183,11 +183,11 @@ export default class Service {
         repo: this.config.repo,
         ...params,
       })
-    );
+    )
     if (!err) {
-      return res?.data;
+      return res?.data
     }
-    return [];
+    return []
   }
 
   async uploadImage(params: RequestParameters) {
@@ -198,7 +198,7 @@ export default class Service {
         message: 'upload images',
         ...params,
       })
-    );
+    )
     if (!err) {
       return [
         {
@@ -208,9 +208,9 @@ export default class Service {
             file: <string>params.path,
           }),
         },
-      ];
+      ]
     }
-    return [];
+    return []
   }
 
   async queryFilterIssueCount(label: string) {
@@ -223,14 +223,14 @@ export default class Service {
           milestone: undefined,
         })
       )
-    );
+    )
     if (!err) {
       const {
         search: { issueCount },
-      } = res as any;
-      return issueCount;
+      } = res as any
+      return issueCount
     }
-    return 1;
+    return 1
   }
 
   async queryTotalCount() {
@@ -238,17 +238,17 @@ export default class Service {
       this.octokit.graphql(
         documents.getIssueCount({ username: this.config.user, repository: this.config.repo })
       )
-    );
-    console.log('total', res);
+    )
+    console.log('total', res)
     if (!err) {
       const {
         repository: {
           issues: { totalCount },
         },
-      } = res as any;
-      return totalCount;
+      } = res as any
+      return totalCount
     }
-    return 1;
+    return 1
   }
 
   /**
@@ -256,25 +256,25 @@ export default class Service {
    */
   private async _registerMethod() {
     const getLabels = async () => {
-      const data = await this.getLabels();
-      return data;
-    };
+      const data = await this.getLabels()
+      return data
+    }
     const getIssues = async (page: string, labels: string) => {
-      return await this.getIssues({ page, labels });
-    };
+      return await this.getIssues({ page, labels })
+    }
     const createLabel = async (name: string) => {
-      return await this.createLabel({ name });
-    };
+      return await this.createLabel({ name })
+    }
     const deleteLabel = async (name: string) => {
-      return await this.deleteLabel({ name });
-    };
+      return await this.deleteLabel({ name })
+    }
     const updateLabel = async (name: string, new_name: string) => {
-      return await this.updateLabel({ name, new_name });
-    };
+      return await this.updateLabel({ name, new_name })
+    }
 
     const createIssue = async (title: string, body: string, labels: any[]) => {
-      return await this.createIssue({ title, body, labels });
-    };
+      return await this.createIssue({ title, body, labels })
+    }
 
     const updateIssue = async (
       issue_number: number,
@@ -282,30 +282,30 @@ export default class Service {
       body: string,
       labels: string
     ) => {
-      return await this.updateIssue({ issue_number, title, body, labels: JSON.parse(labels) });
-    };
+      return await this.updateIssue({ issue_number, title, body, labels: JSON.parse(labels) })
+    }
 
     const uploadImage = async (content: string, path: string) => {
-      return await this.uploadImage({ content, path });
-    };
+      return await this.uploadImage({ content, path })
+    }
 
     const getTotalCount = async () => {
-      return await this.queryTotalCount();
-    };
+      return await this.queryTotalCount()
+    }
 
     const getFilterCount = async (label: string) => {
-      return await this.queryFilterIssueCount(label);
-    };
+      return await this.queryFilterIssueCount(label)
+    }
 
-    this.rpc.on('getLabels', getLabels);
-    this.rpc.on('deleteLabel', deleteLabel);
-    this.rpc.on('createLabel', createLabel);
-    this.rpc.on('updateLabel', updateLabel);
-    this.rpc.on('getIssues', getIssues);
-    this.rpc.on('updateIssue', updateIssue);
-    this.rpc.on('createIssue', createIssue);
-    this.rpc.on('uploadImage', uploadImage);
-    this.rpc.on('getFilterCount', getFilterCount);
-    this.rpc.on('getTotalCount', getTotalCount);
+    this.rpc.on('getLabels', getLabels)
+    this.rpc.on('deleteLabel', deleteLabel)
+    this.rpc.on('createLabel', createLabel)
+    this.rpc.on('updateLabel', updateLabel)
+    this.rpc.on('getIssues', getIssues)
+    this.rpc.on('updateIssue', updateIssue)
+    this.rpc.on('createIssue', createIssue)
+    this.rpc.on('uploadImage', uploadImage)
+    this.rpc.on('getFilterCount', getFilterCount)
+    this.rpc.on('getTotalCount', getTotalCount)
   }
 }

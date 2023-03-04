@@ -1,0 +1,24 @@
+# .prettierignore 文件配置
+/node_modules
+/build
+/dist
+/src/fonts/
+/src/js/lib/exif-rotate-js
+
+## OS
+.DS_Store
+.idea
+.editorconfig
+package-lock.json
+.npmrc
+
+# Ignored suffix
+*.log
+*.md
+*.svg
+*.png
+*ignore
+
+## Built-files
+.cache
+dist

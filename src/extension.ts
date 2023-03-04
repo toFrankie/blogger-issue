@@ -1,14 +1,14 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
-import EditPanel, { getWebviewOptions } from './webviewPanel';
-import { multiStepInput } from './multiSelectInput';
+import * as vscode from 'vscode'
+import EditPanel, { getWebviewOptions } from './webviewPanel'
+import { multiStepInput } from './multiSelectInput'
 
 async function noConfigCheck() {
-  const token = await vscode.workspace.getConfiguration('aaa').get('github.token');
-  const user = await vscode.workspace.getConfiguration('aaa').get('github.user');
-  const repo = await vscode.workspace.getConfiguration('aaa').get('github.repo');
-  return Promise.resolve(!token || !user || !repo);
+  const token = await vscode.workspace.getConfiguration('aaa').get('github.token')
+  const user = await vscode.workspace.getConfiguration('aaa').get('github.user')
+  const repo = await vscode.workspace.getConfiguration('aaa').get('github.repo')
+  return Promise.resolve(!token || !user || !repo)
 }
 
 // this method is called when your extension is activated
@@ -22,28 +22,28 @@ export function activate(context: vscode.ExtensionContext) {
   let disposableA = vscode.commands.registerCommand('blogger-issue.open', async () => {
     // The code you place here will be executed every time your command is executed
     // Display a message box to the user
-    const needConfig = await noConfigCheck();
+    const needConfig = await noConfigCheck()
     if (needConfig) {
-      return multiStepInput(context);
+      return multiStepInput(context)
     }
-    EditPanel.createOrShow(context);
-  });
+    EditPanel.createOrShow(context)
+  })
 
   let disposableB = vscode.commands.registerCommand('blogger-issue.config', () => {
-    multiStepInput(context);
-  });
+    multiStepInput(context)
+  })
 
-  context.subscriptions.push(disposableA, disposableB);
+  context.subscriptions.push(disposableA, disposableB)
 
   if (vscode.window.registerWebviewPanelSerializer) {
     // Make sure we register a serializer in activation event
     vscode.window.registerWebviewPanelSerializer(EditPanel.viewType, {
       async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
         // Reset the webview options so we use latest uri for `localResourceRoots`.
-        webviewPanel.webview.options = getWebviewOptions(context.extensionUri);
-        EditPanel.revive(webviewPanel, context.extensionUri);
+        webviewPanel.webview.options = getWebviewOptions(context.extensionUri)
+        EditPanel.revive(webviewPanel, context.extensionUri)
       },
-    });
+    })
   }
 }
 
