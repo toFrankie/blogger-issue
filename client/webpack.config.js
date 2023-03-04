@@ -8,8 +8,8 @@ module.exports = {
   devtool: process.env.NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : false,
   entry: './src/index.jsx',
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'build'),
+    filename: 'main.js',
+    path: path.resolve(__dirname, 'dist'),
     publicPath: isDev ? '/' : './',
     clean: true,
   },

@@ -107,59 +107,35 @@ export default class EditPanel {
 
   private async _getHtmlForWebview(webview: vscode.Webview) {
     // Local path to main script run in the webview
-    const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'client', 'build/js/main.js')
-    const scriptExtra = vscode.Uri.joinPath(this._extensionUri, 'client', 'build/js/1.js')
+    const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'client', 'dist/main.js')
     // And the uri we use to load this script in the webview
     const scriptUri = webview.asWebviewUri(scriptPathOnDisk)
-    const scriptExtraUri = webview.asWebviewUri(scriptExtra)
 
     // Local path to css styles
-    const stylesPathMainPath = vscode.Uri.joinPath(
-      this._extensionUri,
-      'client',
-      'build/css/main.css'
-    )
+    // const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'client', 'dist/main.css')
 
     // Uri to load styles into webview
-    const stylesMainUri = webview.asWebviewUri(stylesPathMainPath)
+    // const stylesMainUri = webview.asWebviewUri(stylesPathMainPath)
 
     // Use a nonce to only allow specific scripts to be run
     const nonce = getNonce()
-    // const html = `
-    // 		<!doctype html>
-    // 		<html lang="en">
-    // 		<head>
-    // 		<meta charset="utf-8"/>
-    // 		<meta name="viewport" content="width=device-width,initial-scale=1"/>
-    // 		<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">            <meta name="theme-color" content="#000000"/>
-    // 		<meta name="description" content="Web site created using create-react-app"/>
-    // 		<title>React App</title>
-    // 		<link href="${stylesMainUri}" rel="stylesheet">
-    // 		</head>
-    // 		<body>
-    // 			<noscript>You need to enable JavaScript to run this app.</noscript>
-    // 			<div id="root"></div>
-    // 			<script  nonce="${nonce}" src="${scriptExtraUri}"></script>
-    // 			<script  nonce="${nonce}" src="${scriptUri}"></script>
-    // 		</body>
-    // 		</html>
-    // 	`;
     const html = `
-				<!doctype html>
-				<html lang="en">
-				<head>
-				<meta charset="utf-8"/>
-				<meta name="viewport" content="width=device-width,initial-scale=1"/>
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">            <meta name="theme-color" content="#000000"/>
-				<meta name="description" content="Web site created using create-react-app"/>
-				<title>React App</title>
-				</head>
-				<body>
-					<noscript>You need to enable JavaScript to run this app.</noscript>
-					<div id="root">aaaaaaaaaa</div>
-				</body>
-				</html>
-			`
+    		<!doctype html>
+    		<html lang="en">
+    		<head>
+    		<meta charset="utf-8"/>
+    		<meta name="viewport" content="width=device-width,initial-scale=1"/>
+    		<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">            <meta name="theme-color" content="#000000"/>
+    		<meta name="description" content="Web site created using create-react-app"/>
+    		<title>React App</title>
+    		</head>
+    		<body>
+    			<noscript>You need to enable JavaScript to run this app.</noscript>
+    			<div id="root"></div>
+    			<script  nonce="${nonce}" src="${scriptUri}"></script>
+    		</body>
+    		</html>
+    	`
     return html
   }
 }
